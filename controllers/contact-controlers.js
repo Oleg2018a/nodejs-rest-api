@@ -1,10 +1,15 @@
 import HttpError from "../helpers/HttpError.js";
-import { addContacts, getContactById, listContacts, removeContactById, updateContactById } from "../models/index.js";
-import { contactAddShemas, contactUpdateShemas } from "../shemas/contact-shemas.js";
+import Contact from "../models/Contact.js";
+
+import {
+  contactAddShemas,
+  contactUpdateShemas,
+  movieUpdateFavoriteSchema,
+} from "../models/Contact.js";
 
 export const getAll = async (req, res, next) => {
   try {
-    const result = await listContacts();
+    const result = await Contact.find()
 
     res.json(result);
   } catch (error) {
@@ -12,10 +17,12 @@ export const getAll = async (req, res, next) => {
   }
 };
 
+
 export const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await getContactById(id);
+    
+    const result = await Contact.findById(id)
     if (!result) {
       throw HttpError(404);
     }
@@ -33,7 +40,7 @@ export const add = async (req, res, next) => {
           throw HttpError(400, error.message);
         }
 
-      const result = await addContacts(req.body); 
+      const result = await Contact.create(req.body); 
       res.status(201).json(result)
   } catch (error) {
     next(error)
@@ -47,7 +54,7 @@ export const updatebyId = async (req, res, next) => {
         }
 
         const { id } = req.params
-        const result = await updateContactById(id, req.body)
+        const result = await  Contact.findByIdAndUpdate(id, req.body)
        if (!result) {
          throw HttpError(404);
        }
@@ -56,10 +63,27 @@ export const updatebyId = async (req, res, next) => {
         next(error)
     }
 };
+export const updateOnlyById = async (req, res, next) => {
+  try {
+    const { error } = movieUpdateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body);
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 export const deleteById = async (req, res, next) => {
     try {
         const { id } = req.params
-        const result = await removeContactById(id)
+        const result = await Contact.findByIdAndDelete(id)
 
          if (!result) {
            throw HttpError(404);
