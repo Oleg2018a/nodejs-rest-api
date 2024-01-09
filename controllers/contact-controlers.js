@@ -1,4 +1,5 @@
 import HttpError from "../helpers/HttpError.js";
+import { validateShemas } from "../middlewares/index.js";
 import Contact from "../models/Contact.js";
 
 import {
@@ -35,10 +36,7 @@ export const getById = async (req, res, next) => {
 export const add = async (req, res, next) => {
 
     try {
-        const { error } = contactAddShemas.validate(req.body)
-        if (error) {
-          throw HttpError(400, error.message);
-        }
+      validateShemas(contactAddShemas, req.body)
 
       const result = await Contact.create(req.body); 
       res.status(201).json(result)
@@ -46,12 +44,9 @@ export const add = async (req, res, next) => {
     next(error)
   }
 };
-export const updatebyId = async (req, res, next) => {
+export const updateContact = async (req, res, next) => {
     try {
-        const { error } = contactUpdateShemas.validate(req.body)
-         if (error) {
-           throw HttpError(400, error.message);
-        }
+       validateShemas(contactUpdateShemas, req.body);
 
         const { id } = req.params
         const result = await  Contact.findByIdAndUpdate(id, req.body)
@@ -63,7 +58,7 @@ export const updatebyId = async (req, res, next) => {
         next(error)
     }
 };
-export const updateOnlyById = async (req, res, next) => {
+export const updateFavoriteContact = async (req, res, next) => {
   try {
     const { error } = movieUpdateFavoriteSchema.validate(req.body);
     if (error) {

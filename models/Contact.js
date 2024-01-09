@@ -32,14 +32,12 @@ export const contactAddShemas = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": "missing required phone field",
   }),
-  favorite: Joi.boolean(),
 });
 
 export const contactUpdateShemas = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
-  favorite: Joi.boolean(),
 });
 export const movieUpdateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required().messages({

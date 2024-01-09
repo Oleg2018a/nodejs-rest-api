@@ -5,8 +5,8 @@ import {
   deleteById,
   getAll,
   getById,
-  updateOnlyById,
-  updatebyId,
+  updateFavoriteContact,
+  updateContact,
 } from "../../controllers/contact-controlers.js";
 
 import {isEmptyBody, isValidId,} from "../../middlewares/index.js"
@@ -19,9 +19,14 @@ contactsRouter.get("/:id", isValidId, getById);
 
 contactsRouter.post("/", isEmptyBody, add);
 
-contactsRouter.put("/:id", isValidId, isEmptyBody, updatebyId);
+contactsRouter.put("/:id", isValidId, isEmptyBody, updateContact);
 
-contactsRouter.patch("/:id/favorite", isValidId, isEmptyBody, updateOnlyById);
+contactsRouter.patch(
+  "/:id/favorite",
+  isValidId,
+  isEmptyBody,
+  updateFavoriteContact
+);
 
 contactsRouter.delete("/:id",isValidId, deleteById );
 
