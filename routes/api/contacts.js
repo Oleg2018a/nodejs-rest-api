@@ -1,4 +1,4 @@
-import express from 'express'
+import express from "express";
 
 import {
   add,
@@ -9,12 +9,17 @@ import {
   updateContact,
 } from "../../controllers/contact-controlers.js";
 
-import {isEmptyBody, isValidId,} from "../../middlewares/index.js"
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+} from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
+contactsRouter.use(authenticate);
 
-contactsRouter.get("/", getAll );
- 
+contactsRouter.get("/", getAll);
+
 contactsRouter.get("/:id", isValidId, getById);
 
 contactsRouter.post("/", isEmptyBody, add);
@@ -28,8 +33,6 @@ contactsRouter.patch(
   updateFavoriteContact
 );
 
-contactsRouter.delete("/:id",isValidId, deleteById );
+contactsRouter.delete("/:id", isValidId, deleteById);
 
-
-
-export default contactsRouter 
+export default contactsRouter;
