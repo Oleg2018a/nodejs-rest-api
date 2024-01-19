@@ -31,9 +31,6 @@ userShemas.post("findOneAndUpdate", handleSaveError);
 export const userSignUpShema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
-  subscription: Joi.string()
-    .valid("starter", "pro", "business")
-    .default("starter"),
 });
 
 export const userSignInShema = Joi.object({

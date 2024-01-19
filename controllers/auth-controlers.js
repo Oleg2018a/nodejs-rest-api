@@ -9,6 +9,7 @@ dotevn.config()
 const {JWT_SECRET} = process.env
 export const register = async (req, res, next) => {
   try {
+    validateShemas(userSignUpShema, req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
@@ -17,7 +18,7 @@ export const register = async (req, res, next) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    validateShemas(userSignUpShema, req.body);
+    
 
     const newUser = await User.create({ ...req.body, password: hashPassword });
 
@@ -51,8 +52,12 @@ export const login = async (req, res, next) => {
       const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' });
       await User.findByIdAndUpdate(id,{token})
       
-    res.json({ 
+    res.json({
       token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
     });
 
    
