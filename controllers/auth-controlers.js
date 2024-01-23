@@ -103,8 +103,6 @@ export const logout = async (req, res, next) => {
 export const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    console.log(req.body)
-    console.log(req.file)
     const { path: tempUpload, originalname } = req.file;
     const filename = `${_id}_${originalname}`
     const result = path.join(avatarDir, filename);
