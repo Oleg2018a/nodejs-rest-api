@@ -22,7 +22,7 @@ contactsRouter.get("/", getAll);
 
 contactsRouter.get("/:id", isValidId, getById);
 
-contactsRouter.post("/", isEmptyBody, add);
+contactsRouter.post("/",  isEmptyBody, add);
 
 contactsRouter.put("/:id", isValidId, isEmptyBody, updateContact);
 

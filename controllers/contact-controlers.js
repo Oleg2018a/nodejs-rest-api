@@ -2,22 +2,19 @@ import HttpError from "../helpers/HttpError.js";
 import { validateShemas } from "../middlewares/index.js";
 import Contact from "../models/Contact.js";
 import dotevn from "dotenv";
-dotevn.config()
+dotevn.config();
 import {
   contactAddShemas,
   contactUpdateShemas,
   movieUpdateFavoriteSchema,
 } from "../models/Contact.js";
 
+
+
 export const getAll = async (req, res, next) => {
-  
   try {
-     const { _id: owner } = req.user;
-    const result = await Contact.find({ owner }).populate(
-      "owner",
-      "email",
-     
-    );
+    const { _id: owner } = req.user;
+    const result = await Contact.find({ owner }).populate("owner", "email");
 
     res.json(result);
   } catch (error) {
@@ -25,12 +22,11 @@ export const getAll = async (req, res, next) => {
   }
 };
 
-
 export const getById = async (req, res, next) => {
   try {
     const { id: _id } = req.params;
-   const { _id: owner } = req.user;
-    const result = await Contact.findOne({_id, owner})
+    const { _id: owner } = req.user;
+    const result = await Contact.findOne({ _id, owner });
     if (!result) {
       throw HttpError(404);
     }
@@ -41,30 +37,32 @@ export const getById = async (req, res, next) => {
 };
 
 export const add = async (req, res, next) => {
-    
-    try {
-      validateShemas(contactAddShemas, req.body)
-      const { _id: owner } = req.user;
-      const result = await Contact.create({...req.body, owner}); 
-      res.status(201).json(result)
+  try {
+    validateShemas(contactAddShemas, req.body);
+    const { _id: owner } = req.user;
+   
+    const result = await Contact.create({ ...req.body, owner });
+
+    res.status(201).json(result);
+
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 export const updateContact = async (req, res, next) => {
-    try {
-       validateShemas(contactUpdateShemas, req.body);
+  try {
+    validateShemas(contactUpdateShemas, req.body);
 
-          const { id: _id } = req.params;
-          const { _id: owner } = req.user;
-        const result = await  Contact.findOneAndUpdate({_id,owner, ...req.body})
-       if (!result) {
-         throw HttpError(404);
-       }
-        res.json(result)
-    } catch (error) {
-        next(error)
+    const { id: _id } = req.params;
+    const { _id: owner } = req.user;
+    const result = await Contact.findOneAndUpdate({ _id, owner, ...req.body });
+    if (!result) {
+      throw HttpError(404);
     }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 };
 export const updateFavoriteContact = async (req, res, next) => {
   try {
@@ -84,19 +82,18 @@ export const updateFavoriteContact = async (req, res, next) => {
   }
 };
 export const deleteById = async (req, res, next) => {
-    try {
+  try {
+    const { id: _id } = req.params;
+    const { _id: owner } = req.user;
+    const result = await Contact.findOneAndDelete({ _id, owner });
 
-          const { id: _id } = req.params;
-          const { _id: owner } = req.user;
-        const result = await Contact.findOneAndDelete({_id, owner})
-
-         if (!result) {
-           throw HttpError(404);
-         }  
-        res.json({
-          message: "Contact deleted",
-        });
-    }  catch(error) {
-        next(error)
+    if (!result) {
+      throw HttpError(404);
     }
+    res.json({
+      message: "Contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
 };
