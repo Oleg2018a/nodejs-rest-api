@@ -24,7 +24,15 @@ const userShemas = new Schema(
       require: true,
     },
     token: String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
   },
+
   { versionKey: false, timestamps: true }
 ); 
 
@@ -42,6 +50,9 @@ export const userSignUpShema = Joi.object({
 
 export const userSignInShema = Joi.object({
   password: Joi.string().required(),
+  email: Joi.string().required(),
+});
+export const userEmailShema = Joi.object({
   email: Joi.string().required(),
 });
 
